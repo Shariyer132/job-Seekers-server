@@ -26,6 +26,7 @@ async function run() {
     await client.connect();
 
     const jobCollections = client.db("onlineMarket").collection("jobs");
+    const bidJobsCollections = client.db("onlineMarket").collection("bidJobs");
 
     app.get('/jobs', async (req, res) => {
       const result = await jobCollections.find().toArray();
@@ -71,6 +72,12 @@ async function run() {
       const query = {_id: new ObjectId(id)};
       const result = await jobCollections.deleteOne(query);
       res.send(result)
+    })
+
+    app.post('/bidJobs', async(req, res)=>{
+      const bidJobs = req.body;
+      const result = await bidJobsCollections.insertOne(bidJobs);
+      res.send(result);
     })
 
     // Send a ping to confirm a successful connection
