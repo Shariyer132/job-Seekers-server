@@ -32,18 +32,38 @@ async function run() {
       res.send(result);
     })
 
-    app.post('/jobs', async(req, res)=>{
+    app.post('/jobs', async (req, res) => {
       const job = req.body;
       console.log(job);
       const result = await jobCollections.insertOne(job);
       res.send(result)
     })
 
-    app.get('/jobs/:id', async(req, res)=>{
+    app.get('/jobs/:id', async (req, res) => {
       const id = req.params;
-      const query = {_id: new ObjectId(id)};
+      const query = { _id: new ObjectId(id) };
       const result = await jobCollections.findOne(query);
       req.send(result)
+    })
+
+    app.patch('/jobs/:id', async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const job = req.body;
+      console.log(job);
+      const updateDoc = {
+        $set: {
+          email: job.email,
+          jobTitle: job.jobTitle,
+          deadline: job.deadline,
+          category: job.category,
+          shortDescription: job.shortDescription,
+          minimumPrice: job.minimumPrice,
+          maximumPrice: job.maximumPrice,
+        }
+      }
+      const result = await jobCollections.updateOne(filter, updateDoc);
+      res.send(result)
     })
 
     // Send a ping to confirm a successful connection
