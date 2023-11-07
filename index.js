@@ -74,11 +74,18 @@ async function run() {
       res.send(result)
     })
 
+    app.get('/bidJobs', async(req, res)=>{
+      const result = await bidJobsCollections.find().toArray();
+      res.send(result);
+    })
+
     app.post('/bidJobs', async(req, res)=>{
       const bidJobs = req.body;
       const result = await bidJobsCollections.insertOne(bidJobs);
       res.send(result);
     })
+
+   
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
